@@ -1,0 +1,346 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poppins"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/toggle.css' %}" />
+
+    <title>{{ home.first_name }}</title>
+    <link
+      rel="icon"
+      href="{% static 'images/favicon.ico' %}"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div
+      class="App"
+      id="app"
+      data-theme="light"
+      data-bs-spy="scroll"
+      data-bs-target="#mynavbar"
+      data-bs-offset="74"
+      tabindex="0"
+    >
+      <header>
+        <nav
+          class="navbar navbar-expand-lg fixed-top navbar-light container_grid bg-light"
+          id="mynavbar"
+        >
+          <div class="container-fluid">
+            <a class="navbar-brand homelogo" href="#"
+              ><img
+                class="logo-img"
+                id="logo-img"
+                src="/static/images/logo.png"
+            /></a>
+            <button
+              class="navbar-toggler show"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#home"
+                    >Home</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#projects">Projects</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#skills">Skills</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#contact">Contact</a>
+                </li>
+              </ul>
+              <div class="toggle-container">
+                <input type="checkbox" id="theme-toggle" class="toggle" />
+                <label for="theme-toggle" class="unselectable">Dark Mode</label>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <main id="content">
+        <!--  HOME    -->
+        <section
+          class="home container_grid"
+          id="home"
+          style="padding: 0.5rem; background-color: transparent"
+        >
+          <div class="home_data" style="z-index: 100">
+            <div>
+              <h1 class="home_title">
+                {{ home.greeting }} <br />
+                I'm
+                <span class="home_title_color">
+                  {{ home.first_name }} {{ home.last_name }}</span
+                ><br />
+                {{ home.career }}
+              </h1>
+              <div class="home_img_sm" style="">
+                <img
+                  class="img"
+                  style="border-radius: 10px"
+                  src="{{ home.picture.url }}"
+                />
+              </div>
+              <p class="home_summary">{{ home.summary }}</p>
+
+              <div class="home_cta">
+                <a href="#contact" class="btn primary">Get in touch</a>
+                <a href="#projects" class="btn light">My Work</a>
+              </div>
+              <div class="home_social">
+                {% for profile in about.profile_set.all %}
+                <a
+                  href="{{ profile.link }}"
+                  title="{{ profile.social_name }}"
+                  class="home_social_icon"
+                  ><i class="{{ profile.social_icon }}"></i
+                ></a>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="home_img_summary">
+              <div class="home_img">
+                <img
+                  class="img"
+                  style="border-radius: 0.5rem"
+                  src="{{ home.picture.url }}"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABOUT   -->
+        <section class="about section" id="about">
+          <h2 class="section_title">About Me</h2>
+
+          <div class="about_container container_grid">
+            <div class="about_img">
+              <img src="{{ about.profile_img.url }}" class="scale-img" alt="" />
+            </div>
+            <div class="about_right">
+              <div class="about_cards">
+                {% for highlight in highlights %}
+                <div key="{highlight.id}" class="about_card">
+                  <span class="about_card_icon"
+                    ><i class="{{highlight.icon}}"></i
+                  ></span>
+                  <h5>{{highlight.title}}</h5>
+                  <small>{{highlight.description}}</small>
+                </div>
+                {% endfor %}
+              </div>
+              <p class="about_txt">{{ about.description }}</p>
+              <a href="{% url 'download_resume' %}" download class="btn primary"
+                >Download Resume <HiDownload
+              /></a>
+            </div>
+          </div>
+        </section>
+
+        <!-- SERVICES   -->
+        <section class="services section" id="services">
+          <h2 class="section_title">My Services</h2>
+          <p class="section_desc">
+            I provide top-quality services in the areas listed below
+          </p>
+          <div class="services_cards">
+            {% for service in services %}
+            <div key="{service.id}" class="service_card">
+              <span class="service_card_icon"
+                ><i class="{{service.icon}}"></i
+              ></span>
+              <div class="service_card_content">
+                <h5>{{service.title}}</h5>
+                <small>{{service.description}}</small>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <!-- PROJECTS   -->
+        <section class="projects section" id="projects">
+          <h2 class="section_title">Recent Projects</h2>
+          <p class="section_desc">
+            Check out some of the projects I've recently worked on.
+          </p>
+          <div class="projects_container container_grid">
+            {% for project in projects %}
+            <a href="{{project.first_link.link }}">
+              <div class="project">
+                <img
+                  src="{{ project.image.url }}"
+                  alt=""
+                  style=""
+                  class="projects_img"
+                />
+                <br />
+                <h4 class="project_title">{{ project.title }}</h4>
+                <div class="fade_txt">
+                  <p class="about_txt project_txt">{{ project.description }}</p>
+                </div>
+                <p class="project_requirements">
+                  {% for requirement in project.requirements.all %}
+                  <span
+                    >{{ requirement.technology }}{% if not forloop.last %} |
+                    {%endif%}
+                  </span>
+                  {%endfor %}
+                </p>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          <br />
+          <a href="https://github.com/Dei-gratia/" class="btn light" style=""
+            >View More projects on Github</a
+          >
+        </section>
+
+        <!-- SKILLS   -->
+        <section class="skills section" id="skills">
+          <h2 class="section_title">Skills</h2>
+
+          <div class="skills_container container_grid">
+            {% for category in categories %}
+
+            <h6 class="skills_category">{{ category.name }}</h6>
+            <div class="category_skills">
+              {% for skill in category.skills.all %}
+              <div class="skills_data">
+                <div class="skills_names">
+                  <i class="{{skill.icon}} skills_icon"></i>
+                  <span class="skills_name">{{ skill.skill_name }}</span>
+                </div>
+                <div class="skills_bar" style="width: 100%"></div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <!-- CONTACT   -->
+        <section class="contact section" id="contact">
+          <h2 class="section_title">Get In Touch</h2>
+          <p class="section_desc">
+            Feel free to reach out through any of the options below
+          </p>
+
+          <div class="contact_container">
+            <a
+              href="mailto:{{email.email}}?subject=Hello&body=I want to get in touch"
+              ><i class="fa-solid fa-envelope"></i
+            ></a>
+            <a
+              href="https://wa.me/{{phone.phone}}?text=Hello%20I%20would%20like%20to%20get%20in%20touch"
+              ><i class="fa-brands fa-whatsapp"></i
+            ></a>
+            <a href="https://m.me/deigratia.marimo.7/"
+              ><i class="fa-brands fa-facebook-messenger"></i
+            ></a>
+            <a href="tel:{{phone.phone}}"><i class="fa-solid fa-phone"></i></a>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="footer_nav">
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+          </ul>
+        </div>
+        <div class="footer_social">
+          {% for profile in about.profile_set.all %}
+          <a href="{{ profile.link }}" class="footer_icon"
+            ><i class="{{ profile.social_icon }}"></i
+          ></a>
+          {% endfor %}
+        </div>
+
+        <br />
+        <p class="footer_copy">
+          NeMa &#169;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          . All rigths reserved
+        </p>
+      </footer>
+    </div>
+
+    <!--  SCROLL REVEAL  -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!-- JQUERY POPPER BOOTSTRAP CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- INDEX JS -->
+    <script src="{% static 'js/index.js' %}"></script>
+  </body>
+</html>
