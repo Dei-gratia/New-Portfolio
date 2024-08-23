@@ -371,7 +371,8 @@ background-color: var(--color-primary);
 
 .about_card_icon {
 	font-size: 1.3rem;
-	color: var(--color-black);
+	background: var(--color-primary);
+	color: var(--color-white);
 	border-radius: var(--border-radius-3);
 	width: fit-content;
 	margin-inline: auto;
@@ -382,8 +383,8 @@ background-color: var(--color-primary);
 }
 
 .about_card:hover .about_card_icon {
-	background: var(--color-primary);
-	color: var(--color-white);
+	color: var(--color-black);
+	background: var(--background-color);
 }
 
 .about_card:hover{
@@ -578,7 +579,7 @@ background-color: var(--color-primary);
 
 
 .project_requirements {
-	color: var(--color-primary);
+	color: var(--color-black);
 	font-size: smaller;
 	width: 100%;
 	box-sizing: border-box;
