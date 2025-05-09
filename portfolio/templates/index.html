@@ -176,7 +176,9 @@
                     ><i class="{{highlight.icon}}"></i
                   ></span>
                   <h5>{{highlight.title}}</h5>
-                  <small>{{highlight.description}}</small>
+                  <div class="card_desc">
+                    <small>{{highlight.description}}</small>
+                  </div>
                 </div>
                 {% endfor %}
               </div>
@@ -202,7 +204,9 @@
               ></span>
               <div class="service_card_content">
                 <h5>{{service.title}}</h5>
-                <small>{{service.description}}</small>
+                 <div class="card_desc">
+                    <small>{{service.description}}</small>
+                </div>
               </div>
             </div>
             {% endfor %}
