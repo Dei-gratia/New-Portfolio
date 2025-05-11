@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
     />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -18,19 +19,8 @@
     />
 
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-
-    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins"
-      rel="stylesheet"
     />
 
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
@@ -43,7 +33,8 @@
       type="image/x-icon"
     />
   </head>
-  <body>
+  <body class="App" id="app" data-theme="light">
+    <div id="overlay"></div>
     <div
       class="App"
       id="app"
@@ -65,17 +56,20 @@
                 id="logo-img"
                 src="/static/images/logo.png"
             /></a>
-            <button
-              class="navbar-toggler show"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
+
+            <div class="d-flex align-items-center d-lg-none">
+              <button
+                class="navbar-toggler show"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -101,7 +95,7 @@
               </ul>
               <div class="toggle-container">
                 <input type="checkbox" id="theme-toggle" class="toggle" />
-                <label for="theme-toggle" class="unselectable">Dark Mode</label>
+                <label for="theme-toggle" class="unselectable"></label>
               </div>
             </div>
           </div>
@@ -130,22 +124,24 @@
                   style="border-radius: 10px"
                   src="{{ home.picture.url }}"
                 />
+                <div class="img-overlay"></div>
               </div>
-              <p class="home_summary">{{ home.summary }}</p>
+              <div class="home_summary">{{ home.summary|linebreaks|safe }}</div>
 
-              <div class="home_cta">
-                <a href="#contact" class="btn primary">Get in touch</a>
-                <a href="#projects" class="btn light">My Work</a>
-              </div>
               <div class="home_social">
                 {% for profile in about.profile_set.all %}
                 <a
                   href="{{ profile.link }}"
-                  title="{{ profile.social_name }}"
-                  class="home_social_icon"
-                  ><i class="{{ profile.social_icon }}"></i
-                ></a>
+                  class="home_social_icon contact-link"
+                  ><i class="{{ profile.social_icon }}"
+                    ><span class="link-text">{{ profile.social_name }}</span></i
+                  ></a
+                >
                 {% endfor %}
+              </div>
+              <div class="home_cta">
+                <a href="#contact" class="btn primary">Get in touch</a>
+                <a href="#projects" class="btn light">My Work</a>
               </div>
             </div>
             <div class="home_img_summary">
@@ -155,6 +151,26 @@
                   style="border-radius: 0.5rem"
                   src="{{ home.picture.url }}"
                 />
+                <div class="img-overlay"></div>
+                <style>
+                  .img-overlay {
+                    background-color: rgba(0, 0, 0, 0.17);
+                    mask-image: url("{{ home.picture.url }}");
+                    -webkit-mask-image: url("{{ home.picture.url }}");
+                    mask-mode: alpha;
+                    -webkit-mask-mode: alpha;
+                    mask-repeat: no-repeat;
+                    -webkit-mask-repeat: no-repeat;
+                    mask-size: cover;
+                    -webkit-mask-size: cover;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                  }
+                </style>
               </div>
             </div>
           </div>
@@ -162,11 +178,16 @@
 
         <!-- ABOUT   -->
         <section class="about section" id="about">
-          <h2 class="section_title">About Me</h2>
+          <h2 class="section_title">Me, Myself & AI 🤖</h2>
+          <p class="section_desc">
+            " My code compiles 96% of the time. The other 4%? It's just the
+            compiler catching up." 😄
+          </p>
 
           <div class="about_container container_grid">
             <div class="about_img">
-              <img src="{{ about.profile_img.url }}" class="scale-img" alt="" />
+              <img src="{{ about.profile_img.url }}" alt="" />
+              <div class="img-abt-overlay"></div>
             </div>
             <div class="about_right">
               <div class="about_cards">
@@ -182,7 +203,7 @@
                 </div>
                 {% endfor %}
               </div>
-              <p class="about_txt">{{ about.description }}</p>
+              <p class="about_txt">{{ about.description|linebreaks|safe }}</p>
               <a href="{% url 'download_resume' %}" download class="btn primary"
                 >Download Resume <HiDownload
               /></a>
@@ -192,9 +213,10 @@
 
         <!-- SERVICES   -->
         <section class="services section" id="services">
-          <h2 class="section_title">My Services</h2>
+          <h2 class="section_title">Digital Wizardry, Freelance Edition 🧙‍♂️</h2>
           <p class="section_desc">
-            I provide top-quality services in the areas listed below
+            🧠 "Services backed by logic, coffee, and just enough stack overflow
+            searches!"
           </p>
           <div class="services_cards">
             {% for service in services %}
@@ -204,8 +226,11 @@
               ></span>
               <div class="service_card_content">
                 <h5>{{service.title}}</h5>
-                 <div class="card_desc">
-                    <small>{{service.description}}</small>
+                <div>
+                  <span class="service_line"
+                    >{{service.highlight|linebreaks|safe}}</span
+                  >
+                  <small>{{service.description|linebreaks|safe}}</small>
                 </div>
               </div>
             </div>
@@ -214,60 +239,135 @@
         </section>
 
         <!-- PROJECTS   -->
-        <section class="projects section" id="projects">
-          <h2 class="section_title">Recent Projects</h2>
-          <p class="section_desc">
-            Check out some of the projects I've recently worked on.
-          </p>
-          <div class="projects_container container_grid">
-            {% for project in projects %}
-            <a href="{{project.first_link.link }}">
-              <div class="project">
-                <img
-                  src="{{ project.image.url }}"
-                  alt=""
-                  style=""
-                  class="projects_img"
-                />
-                <br />
-                <h4 class="project_title">{{ project.title }}</h4>
-                <div class="fade_txt">
-                  <p class="about_txt project_txt">{{ project.description }}</p>
-                </div>
-                <p class="project_requirements">
-                  {% for requirement in project.requirements.all %}
-                  <span
-                    >{{ requirement.technology }}{% if not forloop.last %} |
-                    {%endif%}
-                  </span>
-                  {%endfor %}
-                </p>
+        <section class="projects section py-5" id="projects">
+          <div class="container">
+            <h2 class="section_title text-center mb-4">
+              🔧 Not Just Another “To-Do List App”
+            </h2>
+            <p class="section_desc text-center mb-5">
+              Yes, I build things that compile on the first try (most days
+              😄).<br />
+              From full-stack apps to AI-powered research, here’s a taste of
+              what I’ve been up to lately:
+            </p>
+
+            <div
+              id="projectCarousel"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <!-- Carousel indicators (dots) -->
+              <div class="carousel-indicators mb-0">
+                {% for project in projects %}
+                <button
+                  type="button"
+                  data-bs-target="#projectCarousel"
+                  data-bs-slide-to="{{ forloop.counter0 }}"
+                  class="{% if forloop.first %}active{% endif %}"
+                  aria-current="true"
+                  aria-label="Slide {{ forloop.counter }}"
+                ></button>
+                {% endfor %}
               </div>
-            </a>
-            {% endfor %}
+
+              <div class="carousel-inner">
+                {% for project in projects %}
+                <div
+                  class="carousel-item {% if forloop.first %}active{% endif %}"
+                >
+                  <div
+                    class="card theme-card text-white mx-auto shadow position-relative overflow-hidden"
+                    style="max-width: 600px; height: 400px; background-size: cover; background-position: center; background-image: url('{{ project.image.url }}');"
+                  >
+                    <!-- ✅ Make overlay cover entire card -->
+                    <div
+                      class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center px-4 py-3"
+                    >
+                      <h4 class="fw-bold mb-1">{{ project.title }} 🚀</h4>
+                      <h6 class="subtitle mb-2">{{ project.project_type }}</h6>
+                      <p class="tagline mb-2" style="font-size: 0.9rem">
+                        “{{ project.tagline }}”
+                      </p>
+                      <p class="description small">{{ project.description }}</p>
+                      <p class="mb-1">
+                        <strong>🧰 Tech Stack:</strong>
+                        {% for requirement in project.requirements.all %}
+                        <span
+                          >{{ requirement.technology }}{% if not forloop.last %}
+                          | {% endif %}</span
+                        >
+                        {% endfor %}
+                      </p>
+                      <p class="mb-2">
+                        <strong>🔑 Keywords:</strong>
+                        {% for keyword in project.keyword_list %}
+                        <span class="badge bg-secondary me-1"
+                          >{{ keyword }}</span
+                        >
+                        {% endfor %}
+                      </p>
+                      <div class="home_cta">
+                        {% if project.get_demo_link %}
+                        <a
+                          href="{{ project.get_demo_link.link }}"
+                          target="_blank"
+                          class="btn primary"
+                        >
+                          Live Demo
+                        </a>
+                        {% endif %} {% if project.get_publication_link %}
+                        <a
+                          href="{{ project.get_publication_link.link }}"
+                          target="_blank"
+                          class="btn primary"
+                        >
+                          Publication
+                        </a>
+                        {% endif %} {% if project.get_github_link %}
+                        <a
+                          href="{{ project.get_github_link.link }}"
+                          target="_blank"
+                          class="btn light"
+                        >
+                          GitHub
+                        </a>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="text-center mt-4">
+              <a href="https://github.com/Dei-gratia/" class="btn light"
+                >🔗 View More Projects on GitHub</a
+              >
+            </div>
           </div>
-          <br />
-          <a href="https://github.com/Dei-gratia/" class="btn light" style=""
-            >View More projects on Github</a
-          >
         </section>
 
         <!-- SKILLS   -->
         <section class="skills section" id="skills">
-          <h2 class="section_title">Skills</h2>
+          <h2 class="section_title">💡 My Toolbox - Skills & Spells 🛠️</h2>
+          <p class="section_desc">
+            "Endorsed by compilers, debuggers, and occasionally my Wi-Fi
+            router." 📡💻
+          </p>
 
           <div class="skills_container container_grid">
-            {% for category in categories %}
+            {% for category in categories|dictsort:"order" %}
 
             <h6 class="skills_category">{{ category.name }}</h6>
             <div class="category_skills">
-              {% for skill in category.skills.all %}
+              {% for skill in category.skills.all%}
               <div class="skills_data">
                 <div class="skills_names">
                   <i class="{{skill.icon}} skills_icon"></i>
                   <span class="skills_name">{{ skill.skill_name }}</span>
                 </div>
-                <div class="skills_bar" style="width: 100%"></div>
+                <!-- <div class="skills_bar" style="width: 100%"></div> -->
               </div>
               {% endfor %}
             </div>
@@ -277,55 +377,61 @@
 
         <!-- CONTACT   -->
         <section class="contact section" id="contact">
-          <h2 class="section_title">Get In Touch</h2>
+          <h2 class="section_title">Let’s Debug Life Together 💬🐞</h2>
           <p class="section_desc">
-            Feel free to reach out through any of the options below
+            Feel free to reach out — I promise my response time is better than
+            most APIs!
           </p>
 
           <div class="contact_container">
             <a
               href="mailto:{{email.email}}?subject=Hello&body=I want to get in touch"
-              ><i class="fa-solid fa-envelope"></i
-            ></a>
+              class="contact-link"
+              ><i class="fa-solid fa-envelope"
+                ><span class="link-text">Email me your best bug 🐛</span></i
+              ></a
+            >
             <a
               href="https://wa.me/{{phone.phone}}?text=Hello%20I%20would%20like%20to%20get%20in%20touch"
-              ><i class="fa-brands fa-whatsapp"></i
-            ></a>
-            <a href="https://m.me/deigratia.marimo.7/"
-              ><i class="fa-brands fa-facebook-messenger"></i
-            ></a>
-            <a href="tel:{{phone.phone}}"><i class="fa-solid fa-phone"></i></a>
+              class="contact-link"
+              ><i class="fa-brands fa-whatsapp"
+                ><span class="link-text">Say hi on WhatsApp</span></i
+              ></a
+            >
+            <a href="https://m.me/deigratia.marimo.7/" class="contact-link"
+              ><i class="fa-brands fa-facebook-messenger"
+                ><span class="link-text">Let’s Messenger it out 📩</span></i
+              ></a
+            >
+            <a href="tel:{{phone.phone}}" class="contact-link"
+              ><i class="fa-solid fa-phone"
+                ><span class="link-text">Call me maybe ☎️</span></i
+              ></a
+            >
           </div>
         </section>
+
+        <!-- Footer   -->
+        <footer class="footer">
+          <!--<div class="footer_social">
+            {% for profile in about.profile_set.all %}
+            <a href="{{ profile.link }}" class="footer_icon"
+              ><i class="{{ profile.social_icon }} contact-link"
+                ><span class="link-text">{{ profile.social_name }}</span></i
+              ></a
+            >
+            {% endfor %}
+          </div>-->
+
+          <p class="footer_copy">
+            NeMa &#169;
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            . All rigths reserved
+          </p>
+        </footer>
       </main>
-
-      <footer class="footer">
-        <div class="footer_nav">
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#skills">Skills</a></li>
-          </ul>
-        </div>
-        <div class="footer_social">
-          {% for profile in about.profile_set.all %}
-          <a href="{{ profile.link }}" class="footer_icon"
-            ><i class="{{ profile.social_icon }}"></i
-          ></a>
-          {% endfor %}
-        </div>
-
-        <br />
-        <p class="footer_copy">
-          NeMa &#169;
-          <script>
-            document.write(new Date().getFullYear());
-          </script>
-          . All rigths reserved
-        </p>
-      </footer>
     </div>
 
     <!--  SCROLL REVEAL  -->

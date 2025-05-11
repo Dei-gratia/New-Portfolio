@@ -45,10 +45,10 @@ def index(request):
 
 
 def download_resume(request):
-    file_path = os.path.join(settings.MEDIA_ROOT, 'Nenyasha_Madyavanhu_Resume_2024.pdf')  # Adjust this path to your file
+    file_path = os.path.join(settings.MEDIA_ROOT, 'Nenyasha_Madyavanhu_Resume_2025.pdf')  # Adjust this path to your file
     if os.path.exists(file_path):
         response = FileResponse(open(file_path, 'rb'), content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="resume.pdf"'
+        response['Content-Disposition'] = 'attachment; filename="Nenyasha_Madyavanhu_Resume_2025.pdf"'
         return response
     else:
         raise Http404("Resume not found.")

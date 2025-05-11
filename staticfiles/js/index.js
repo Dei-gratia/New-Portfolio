@@ -61,15 +61,15 @@ var onResize = function () {
 const sr = ScrollReveal({
     origin: 'top',
     distance: '40px',
-    duration: 2000,
-    delay: 200,
+    duration: 1000,
+    delay: 100,
 
 });
 
-sr.reveal('.home_title, .home_img_sm, .home_img, .about_img, .home_summary, .skills_txt',{delay: 50});
-sr.reveal('.card_desc, .section_desc ,.about_career, .about_txt, .skills_img',{delay: 50});
+sr.reveal('.home_title, .home_img_sm, .home_img, .about_img, .home_summary',{delay: 50});
+sr.reveal('.card_desc, .section_desc ,.about_career, .about_txt',{delay: 50});
 sr.reveal('.home_social_icon',{ interval: 100});
-sr.reveal('.skills_data, .contact_input',{interval: 100});
+sr.reveal('.skills_names, .contact_input',{interval: 0}, {delay: 0});
 
 
 

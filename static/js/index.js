@@ -53,8 +53,39 @@ var onResize = function () {
   // call it also when the page is ready after load or reload
   $(function () {
 	onResize();
-  });
+});
 
+let lastScrollTop = 0;
+const navbar = document.getElementById("mynavbar");
+
+function handleScroll() {
+    if (window.innerWidth >= 992) {
+      // On large screens, always show the navbar
+      navbar.classList.remove("navbar-hidden");
+      navbar.classList.add("navbar-visible");
+      return;
+    }
+
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll > lastScrollTop && currentScroll > 50) {
+      // Scrolling down
+      navbar.classList.remove("navbar-visible");
+      navbar.classList.add("navbar-hidden");
+    } else {
+      // Scrolling up
+      navbar.classList.remove("navbar-hidden");
+      navbar.classList.add("navbar-visible");
+    }
+
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }
+
+  // Attach scroll listener
+  window.addEventListener("scroll", handleScroll);
+
+  // Recheck on resize in case user resizes to desktop
+  window.addEventListener("resize", handleScroll);
 
 
 
@@ -66,10 +97,10 @@ const sr = ScrollReveal({
 
 });
 
-sr.reveal('.home_title, .home_img_sm, .home_img, .about_img, .home_summary, .skills_txt',{delay: 50});
-sr.reveal('.card_desc, .section_desc ,.about_career, .about_txt, .skills_img',{delay: 50});
+sr.reveal('.home_title, .home_img_sm, .home_img, .about_img, .home_summary',{delay: 50});
+sr.reveal('.card_desc, .section_desc ,.about_career, .about_txt',{delay: 50});
 sr.reveal('.home_social_icon',{ interval: 100});
-sr.reveal('.skills_data, .contact_input',{interval: 100});
+sr.reveal('.skills_names, .contact_input',{interval: 0}, {delay: 0});
 
 
 

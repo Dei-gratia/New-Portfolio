@@ -7,10 +7,10 @@ from .fields import OrderField
 
 # HOME SECTION
 class Home(models.Model):
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    greeting = models.CharField(max_length=20)
-    career = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=254)
+    last_name = models.CharField(max_length=254)
+    greeting = models.CharField(max_length=100)
+    career = models.CharField(max_length=254)
     summary = models.TextField(blank=False)
     picture = models.ImageField(upload_to='home/')
 
@@ -21,7 +21,7 @@ class Home(models.Model):
 
 class Highlights(models.Model):
     icon = models.CharField(max_length=100, blank=True)
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=254)
     description = models.TextField(blank=True)
     order = OrderField(blank=True, default=0, for_fields=None)
     class Meta:
@@ -54,7 +54,7 @@ class Phone(models.Model):
 
 class Profile(models.Model):
     about = models.ForeignKey(About, on_delete=models.CASCADE)
-    social_name = models.CharField(max_length=50)
+    social_name = models.CharField(max_length=254)
     link = models.URLField(max_length=254)
     social_icon = models.CharField(max_length=100, blank=True)
     order = OrderField(blank=True, default=0, for_fields=['about'])
@@ -64,10 +64,13 @@ class Profile(models.Model):
 
 # SERVICES SECTION
 class Services(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=254)
+    highlight = models.TextField(blank=True, default="")
     description = models.TextField(blank=False)
     icon = models.CharField(max_length=100, blank=True)
     order = OrderField(blank=True, default=0, for_fields=None)
+    class Meta:
+        ordering = ['order']
 
     def __str__(self):
         return f'{self.title} Services'
@@ -75,7 +78,7 @@ class Services(models.Model):
 
 # SKILLS SECTION
 class Category(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=254)
     updated = models.DateTimeField(auto_now=True)
     order = OrderField(blank=True, default=0, for_fields=None)
     class Meta:
@@ -91,9 +94,9 @@ class Category(models.Model):
 class Skills(models.Model):
     category = models.ForeignKey(
         Category, related_name='skills', on_delete=models.CASCADE)
-    skill_name = models.CharField(max_length=50)
+    skill_name = models.CharField(max_length=254)
     icon = models.CharField(max_length=100, blank=True)
-    level = models.IntegerField(
+    level = models.IntegerField( default=100,
         validators=[MinValueValidator(1), MaxValueValidator(100)])
     order = OrderField(blank=True, default=0, for_fields=['category'])
 	
@@ -104,11 +107,14 @@ class Skills(models.Model):
 # PROJECTS SECTION
 class Projects(models.Model):
     image = models.ImageField(upload_to='projects/')
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=254)
+    project_type = models.CharField(max_length=254, default="Personal Project")
     start_date = models.DateField()
     end_date = models.DateField(blank=True)
+    tagline = models.TextField(blank=True, default="")
     description = models.TextField()
     future_scope = models.TextField(blank=True)
+    keywords = models.CharField(max_length=512, blank=True, help_text="Comma-separated keywords (e.g., Python,Cloud,ML)")
     order = OrderField(blank=True, default=0, for_fields=None)
     
     class Meta:
@@ -119,8 +125,17 @@ class Projects(models.Model):
     def __str__(self):
         return f'{self.title} project'
     
-    def first_link(self):
-        return self.links.first()
+    def get_publication_link(self):
+        return self.links.filter(link_text__iexact='publication').first()
+    
+    def get_github_link(self):
+        return self.links.filter(link_text__iexact='github').first()
+
+    def get_demo_link(self):
+        return self.links.filter(link_text__iexact='demo').first()
+    
+    def keyword_list(self):
+        return [kw.strip() for kw in self.keywords.split(',') if kw.strip()]
 
 class ProjectRequirements(models.Model):
     project = models.ForeignKey(Projects, related_name='requirements', on_delete=models.CASCADE)
