@@ -53,16 +53,47 @@ var onResize = function () {
   // call it also when the page is ready after load or reload
   $(function () {
 	onResize();
-  });
+});
 
+let lastScrollTop = 0;
+const navbar = document.getElementById("mynavbar");
+
+function handleScroll() {
+    if (window.innerWidth >= 992) {
+      // On large screens, always show the navbar
+      navbar.classList.remove("navbar-hidden");
+      navbar.classList.add("navbar-visible");
+      return;
+    }
+
+    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll > lastScrollTop && currentScroll > 50) {
+      // Scrolling down
+      navbar.classList.remove("navbar-visible");
+      navbar.classList.add("navbar-hidden");
+    } else {
+      // Scrolling up
+      navbar.classList.remove("navbar-hidden");
+      navbar.classList.add("navbar-visible");
+    }
+
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+  }
+
+  // Attach scroll listener
+  window.addEventListener("scroll", handleScroll);
+
+  // Recheck on resize in case user resizes to desktop
+  window.addEventListener("resize", handleScroll);
 
 
 
 const sr = ScrollReveal({
     origin: 'top',
     distance: '40px',
-    duration: 1000,
-    delay: 100,
+    duration: 2000,
+    delay: 200,
 
 });
 
